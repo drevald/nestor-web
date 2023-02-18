@@ -1,0 +1,7 @@
+Uploaded files
+<ul>
+    {% for file in files %}
+        <li><a href="/parse?file={{file}}">{{file}}</a></li>
+    {% endfor %}
+</ul>
+<a href="/upload">Upload more</a>
