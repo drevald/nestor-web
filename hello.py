@@ -3,7 +3,7 @@ import base64
 from flask import Flask, request, flash, redirect, url_for, render_template
 from PIL import Image
 
-UPLOAD_FOLDER="D:\\Uploads"
+UPLOAD_FOLDER="."
 
 app = Flask(__name__)
 
