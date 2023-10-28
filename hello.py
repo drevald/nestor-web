@@ -48,4 +48,4 @@ def parse():
     with open(path, "rb") as image_file:
         encoded_file = base64.b64encode(image_file.read())
         print(encoded_file.decode())    
-    return render_template("image.html", source=encoded_file.decode())
+    return render_template("sample.html", source=encoded_file.decode())
