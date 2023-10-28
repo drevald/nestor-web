@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <canvas 
+            id="c" 
+            style="padding-top:5" 
+            width="500" 
+            height="587"
+            onMouseDown="javascript:startRect(event);"
+            onMouseMove="javascript:drawRect(event);"
+            onMouseUp="javascript:endRect(event);">canvas not supported</canvas>
+        <button onclick="javascript:showSelection();">select</button>
+        <script>
+
+            var drawing;
+            var rectStartX;
+            var rectStartY;
+            var rectEndX;
+            var rectEndY;
+
+            var selection;
+
+            var c = document.getElementById("c");
+            var context = c.getContext("2d", {willReadFrequently: true});
+            context.strokeRect(0, 0, c.width, c.height);
+            imageObj = new Image();
+            imageObj.crossOrigin = "Anonymous";
+            imageObj.onload = function() { 
+                context.drawImage(imageObj, 0, 0, 500, 500 * imageObj.height / imageObj.width)
+            }
+            imageObj.src = "data:image/jpg;base64,{{ source }}";
+
+            function startRect(event) {
+                drawing = true;
+                rectStartX = event.x-5;
+                rectStartY = event.y-10;
+            }
+
+            function drawRect(event) {
+                if (drawing) {
+                    rectEndX = event.x-5;
+                    rectEndY = event.y-10;
+                    context.setLineDash([5, 3]);
+                    context.clearRect(0, 0, c.width, c.height);
+                    context.drawImage(imageObj, 0, 0, 500, 500 * imageObj.height / imageObj.width)
+                    context.strokeRect(rectStartX, rectStartY, rectEndX-rectStartX, rectEndY-rectStartY);
+                }
+            }
+
+            function endRect(event) {
+                drawing = false;
+                selection = context.getImageData(0, 0, imageObj.width, imageObj.height);                
+                // context.clearRect(0, 0, c.width, c.height);
+                // context.putImageData(selection, -rectStartX, -rectStartY, rectStartX, rectStartY, rectEndX-rectStartX, rectEndY-rectStartY);                
+            }
+
+            function showSelection() {
+                var url = "selection?file={{ file }}"
+                url += "&rectStartX=" + Math.floor(rectStartX * imageObj.width/500)
+                url += "&rectStartY=" + Math.floor(rectStartY * imageObj.width/500)
+                url += "&rectEndX=" + Math.floor(rectEndX * imageObj.width/500)
+                url += "&rectEndY=" + Math.floor(rectEndY * imageObj.width/500)
+                document.location = url
+            }
+
+        </script>
+    </body>
+</html>

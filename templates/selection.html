@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <canvas 
+            id="c" 
+            style="padding-top:5" 
+            width="500" 
+            height="587"
+            onMouseDown="javascript:startRect(event);"
+            onMouseMove="javascript:drawRect(event);"
+            onMouseUp="javascript:endRect(event);">canvas not supported</canvas>
+        <script>
+            var c = document.getElementById("c");
+            var context = c.getContext("2d", {willReadFrequently: true});
+            context.strokeRect(0, 0, c.width, c.height);
+            imageObj = new Image();
+            imageObj.crossOrigin = "Anonymous";
+            imageObj.onload = function() { 
+                context.drawImage(imageObj, 0, 0, 500, 500 * imageObj.height / imageObj.width)
+            }
+            imageObj.src = "data:image/jpg;base64,{{ source }}";
+        </script>
+    </body>
+</html>
